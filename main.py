@@ -6,6 +6,8 @@
 
 from turtle import Turtle, Screen
 import time, Snake
+from food import Food
+from Scoreboard import Scoreboard
 
 screen = Screen()
 screen.setup(width=600, height=600)
@@ -20,10 +22,18 @@ screen.onkey(key="Right", fun=snake.moveRight)
 screen.onkey(key="Left", fun=snake.moveLeft)
 screen.listen()
 gameIsOn = True
-
+food = Food()
+snakeHead = snake.snakeHead
+score = Scoreboard()
 while gameIsOn:
     screen.update()
     time.sleep(0.2)
     snake.move()
+    if snake.detectFoodCollision(food= food):
+        food.refresh()
+        score.updateScore()
+    if snake.detectWallCollision():
+        print("Gameover")
+        gameIsOn = False
 screen.exitonclick()
 

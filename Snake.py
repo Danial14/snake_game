@@ -46,3 +46,9 @@ class Snake:
             snakeBodyPart = self.snake_segMents[i]
             snakeBodyPart.goto(self.snake_segMents[i - 1].position())
         self.snakeHead.forward(10)
+
+    def detectFoodCollision(self, food):
+        return self.snakeHead.distance(food) < 15
+
+    def detectWallCollision(self):
+        return self.snakeHead.xcor() == 290 or self.snakeHead.xcor() == -290 or self.snakeHead.ycor() == 290 or self.snakeHead.ycor() == -290
