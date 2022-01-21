@@ -32,8 +32,13 @@ while gameIsOn:
     if snake.detectFoodCollision(food= food):
         food.refresh()
         score.updateScore()
+        snake.addBodySegment()
     if snake.detectWallCollision():
-        print("Gameover")
+        score.gameOver()
         gameIsOn = False
+    if snake.detectBodyCollision():
+        score.gameOver()
+        gameIsOn = False
+
 screen.exitonclick()
 

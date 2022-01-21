@@ -5,6 +5,8 @@ UP = 90
 DOWN = 270
 LEFT = 180
 RIGHT = 0
+WALL_BOUNDARY_ONE = 290
+WALL_BOUNDARY_TWO = -290
 
 class Snake:
     def __init__(self):
@@ -19,7 +21,7 @@ class Snake:
             snake.penup()
             snake.color("white")
             snake.setposition(x=x_axis, y=0)
-            x_axis = x_axis - 20
+            x_axis = x_axis - 10
             self.snake_segMents.append(snake)
 
     def changePosition(self, angle):
@@ -42,7 +44,7 @@ class Snake:
             self.changePosition(LEFT)
 
     def move(self):
-        for i in range(2, 0, -1):
+        for i in range(len(self.snake_segMents) - 1, 0, -1):
             snakeBodyPart = self.snake_segMents[i]
             snakeBodyPart.goto(self.snake_segMents[i - 1].position())
         self.snakeHead.forward(10)
@@ -51,4 +53,17 @@ class Snake:
         return self.snakeHead.distance(food) < 15
 
     def detectWallCollision(self):
-        return self.snakeHead.xcor() == 290 or self.snakeHead.xcor() == -290 or self.snakeHead.ycor() == 290 or self.snakeHead.ycor() == -290
+        return self.snakeHead.xcor() >= WALL_BOUNDARY_ONE or self.snakeHead.xcor() <= WALL_BOUNDARY_TWO or self.snakeHead.ycor() >= WALL_BOUNDARY_ONE or self.snakeHead.ycor() <= WALL_BOUNDARY_TWO
+
+    def addBodySegment(self):
+        snakeBodySegment = Turtle(shape="square")
+        snakeBodySegment.color("white")
+        snakeBodySegment.penup()
+        self.snake_segMents.append(snakeBodySegment)
+        self.move()
+
+    def detectBodyCollision(self):
+        for i in range(1, len(self.snake_segMents)):
+            snakeBodyPart = self.snake_segMents[i]
+            if self.snakeHead.distance(snakeBodyPart) < 5:
+                return True
