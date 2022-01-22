@@ -7,6 +7,8 @@ LEFT = 180
 RIGHT = 0
 WALL_BOUNDARY_ONE = 290
 WALL_BOUNDARY_TWO = -290
+BODY_HIT_DISTANCE = 5
+FOOD_HIT_DISTANCE = 15
 
 class Snake:
     def __init__(self):
@@ -50,7 +52,7 @@ class Snake:
         self.snakeHead.forward(10)
 
     def detectFoodCollision(self, food):
-        return self.snakeHead.distance(food) < 15
+        return self.__detectCollision(turtle=food, distanceFromHead=FOOD_HIT_DISTANCE)
 
     def detectWallCollision(self):
         return self.snakeHead.xcor() >= WALL_BOUNDARY_ONE or self.snakeHead.xcor() <= WALL_BOUNDARY_TWO or self.snakeHead.ycor() >= WALL_BOUNDARY_ONE or self.snakeHead.ycor() <= WALL_BOUNDARY_TWO
@@ -63,7 +65,9 @@ class Snake:
         self.move()
 
     def detectBodyCollision(self):
-        for i in range(1, len(self.snake_segMents)):
-            snakeBodyPart = self.snake_segMents[i]
-            if self.snakeHead.distance(snakeBodyPart) < 5:
+        for snakeBodyPart in self.snake_segMents[1:]:
+            if self.__detectCollision(turtle=snakeBodyPart, distanceFromHead=BODY_HIT_DISTANCE):
                 return True
+
+    def __detectCollision(self, turtle, distanceFromHead):
+        return self.snakeHead.distance(turtle) < distanceFromHead
